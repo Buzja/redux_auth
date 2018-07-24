@@ -24,4 +24,4 @@ const mapStateToProps = state =>{
 }
 
 
-export default connect(mapStateToProps,null)(CloudStorage);
+export default connect(mapStateToProps)(CloudStorage);
