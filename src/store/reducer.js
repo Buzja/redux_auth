@@ -1,9 +1,9 @@
 const initialState = {
     token: null,
+    userEmail:null,
     userId: null,
     error: null,
     loading: false,
-    isAuth: false
 }
 
 const updateObject = (oldObject, updatedProperties) => {
@@ -22,8 +22,8 @@ const reducer=(state = initialState ,action)=>{
             return updateObject( state, { 
                 token: action.idToken,
                 userId: action.userId,
+                userEmail: action.userEmail,
                 error: null,
-                isAuth: true,
                 loading: false
              } );
         } 

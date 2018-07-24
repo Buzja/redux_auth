@@ -6,11 +6,12 @@ export const authStart = () => {
     }
 };
 
-export const authSuccess = (token, userId) => {
+export const authSuccess = (token, userId,userEmail) => {
     return{
         type: 'AUTH_SUCCESS',
         idToken: token,
-        userId: userId
+        userId: userId,
+        userEmail: userEmail
     }
 };
 
@@ -25,6 +26,7 @@ export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userEmail');
     return {
         type: 'LOGOUT'
     }
@@ -41,16 +43,15 @@ export const onAuth = (email,password,url) =>{
         };
         axios.post(url,authData)
       .then((res)=>{
-          console.log(res);
-          const expirationDate = new Date(new Date().getTime() + res.data.expiresIn * 1000);
+        const expirationDate = new Date(new Date().getTime() + res.data.expiresIn * 1000);
         localStorage.setItem('token', res.data.idToken);
         localStorage.setItem('expirationDate', expirationDate);
         localStorage.setItem('userId', res.data.localId);
-        dispatch(authSuccess(res.data.idToken, res.data.localId));
+        localStorage.setItem('userEmail', res.data.email);
+        dispatch(authSuccess(res.data.idToken, res.data.localId, res.data.email));
       })
       .catch((err)=>{
         dispatch(authFail(err.response.data.error.message));
-        console.log(err.response.data.error.message)
       });
         
     }
@@ -65,7 +66,8 @@ export const authCheckState = () =>{
         else{
             //const expirationDate = new Date(localStorage.getItem('expirationDate'));
             const userId = localStorage.getItem('userId');
-            dispatch(authSuccess(token,userId));
+            const userEmail = localStorage.getItem('userEmail');
+            dispatch(authSuccess(token,userId,userEmail));
         }
     }
 }
