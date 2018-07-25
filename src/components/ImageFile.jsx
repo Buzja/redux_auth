@@ -4,8 +4,6 @@ import docImg from './doc.svg';
 
 function ImageFile({downloadUrl,name,type,onDownload,onDelete})
 {
-  console.log(downloadUrl);
-  
   return(
     <div className="imageFile">
     <div className="info_wrapper">
