@@ -15,8 +15,6 @@ import Logout from './containers/Logout';
 class App extends Component {
 
   componentDidMount = () =>{
-    console.log(`token ${this.props.isAuthenticated}`);
-    
     this.props.onAutoTryAuth();
   }
 

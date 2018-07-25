@@ -32,6 +32,57 @@ export const logout = () => {
     }
 }
 
+export const uploadStarts = () =>{
+    return{
+        type: 'UPLOADING_START',
+    }
+}
+
+export const uploadSuccess = () =>{
+    return{
+        type: 'UPLOADING_SUCCESS',
+    }
+}
+
+export const uploadFailed = (error) =>{
+    return{
+        type: 'UPLOADING_FAILED',
+        error: error
+    }
+}
+
+export const deleteStarts=()=>{
+    return{
+        type:'DELETE_START'
+    }
+}
+
+export const deleteFailed=(error)=>{
+    return{
+        type : 'DELETE_FAILED',
+        error: error
+    }
+}
+
+export const deleteSuccess=(fileId)=>{
+    return{
+        type : 'DELETE_SUCCESS',
+        fileId : fileId
+    }
+}
+
+export const addFile=(snap)=>{
+    return {
+        type: 'ADD_FILE',
+        file:{
+            id: snap.key,
+            name: snap.val().name,
+            downloadUrl: snap.val().downloadUrl,
+            type: snap.val().type
+        }
+      }
+}
+
 export const onAuth = (email,password,url) =>{
     
     return dispatch=>{
@@ -69,5 +120,56 @@ export const authCheckState = () =>{
             const userEmail = localStorage.getItem('userEmail');
             dispatch(authSuccess(token,userId,userEmail));
         }
+    }
+}
+
+export const onUploadFiles=(database,storage,dbPath,uploadFile)=>{
+    return dispatch=>{
+        dispatch(uploadStarts());
+        const filePath = dbPath +"/"+uploadFile.name;
+        const uploadTask = storage.ref(filePath).put(uploadFile);
+        uploadTask.on('state_changed', function(snapshot){
+        var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        console.log('Upload is ' + progress + '% done');
+      }, function(error) {
+        dispatch(uploadFailed(error));
+        console.log(error);
+      }, function() {
+        storage.ref(filePath).getDownloadURL().then(url=>{
+            dispatch(uploadSuccess());
+            database.ref(dbPath).push().set({
+           name: uploadFile.name,
+           downloadUrl: url,
+           type: uploadFile.type
+           })
+        })
+      });
+    }
+}
+
+export const deleteFile=(database,storage,file,dbPath)=>{
+    return dispatch=>{
+        dispatch(deleteStarts());
+        storage.ref(dbPath+"/"+file.name).delete().then(()=>{
+            database.ref(dbPath).child(file.id).remove();
+          }).catch((err)=>{
+            dispatch(deleteFailed(err));
+          })
+    }
+}
+
+export const subscribeOnDelete=(database,dbPath)=>{
+    return dispatch=>{
+    database.ref(dbPath).on('child_removed',snap=>{
+        dispatch(deleteSuccess(snap.key));  
+      })
+    }
+}
+
+export const subscribeOnAdd = (database,dbPath)=>{
+    return dispatch=>{
+    database.ref(dbPath).on('child_added',snap=>{
+       dispatch(addFile(snap));
+      })
     }
 }
