@@ -5,9 +5,40 @@
     padding: 30px 20px;
     box-sizing: border-box;
 }
-
+.head_sec{
+     padding: 30px 35px 0px 35px;
+     display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.user_data{
+    display: flex;
+align-items: center;
+}
+.user_email{
+    padding-right: 50px;
+font-size: 18px;
+font-weight: bold;
+}
+.user_email span{
+    padding-right: 5px;
+font-size: 15px;
+font-weight: 400;
+}
+.user_data a{
+    display: block;
+    color: #2d2d2d;
+    transition: .3s;
+    text-decoration: none;
+}
+.user_data a:hover{
+    color: #6248ff
+}
 @media only screen and (max-width: 480px){
     .files_wrapper{
         padding: 30px 10px;
+    }
+    .head_sec{
+        flex-direction: column-reverse;
     }
 }

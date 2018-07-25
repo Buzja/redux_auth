@@ -1,7 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 .form_container{
   display: flex;
@@ -13,4 +14,13 @@ body {
   align-items: center;
   margin: 0 auto;
   flex-wrap: wrap;
+}
+
+.form_container a{
+  padding-top: 10px;
+  color: #2d2d2d;
+  transition: .3s;
+}
+.form_container a:hover{
+  color:#6248ff;
 }

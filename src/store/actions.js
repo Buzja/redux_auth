@@ -1,4 +1,5 @@
 import axios from 'axios';
+import fileSaver from 'file-saver'; 
 
 export const authStart = () => {
     return{
@@ -68,6 +69,25 @@ export const deleteSuccess=(fileId)=>{
     return{
         type : 'DELETE_SUCCESS',
         fileId : fileId
+    }
+}
+
+export const downloadStarts = () =>{
+    return{
+        type: 'DOWNLOAD_START',
+    }
+}
+
+export const downloadSuccess = () =>{
+    return{
+        type: 'DOWNLOAD_SUCCESS',
+    }
+}
+
+export const downloadFailed = (error) =>{
+    return{
+        type: 'DOWNLOAD_FAILED',
+        error: error
     }
 }
 
@@ -171,5 +191,27 @@ export const subscribeOnAdd = (database,dbPath)=>{
     database.ref(dbPath).on('child_added',snap=>{
        dispatch(addFile(snap));
       })
+    }
+}
+
+export const onDownloadFile=(url,name)=>{
+    return dispatch=>{
+        dispatch(downloadStarts());
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+
+        xhr.open('GET', url);
+        xhr.onload = function() {
+            if (this.status === 200) {
+            var blob = xhr.response;
+            fileSaver.saveAs(blob,name);
+            dispatch(downloadSuccess());
+            }
+            else{
+                dispatch(downloadFailed('Error! status: '+ this.status));
+            }
+        };
+
+        xhr.send();
     }
 }

@@ -63,7 +63,7 @@
     display: block;
     background: #6248ff;
     color: #ffffff;
-    box-shadow: 0 4px 20px #34278599;
+    box-shadow: 0 2px 4px #3e357799;
     padding: 12px;
     font-size: 12px;
     border: none;
@@ -77,17 +77,28 @@
 }
 .imageFile__dwnld_btn:hover{
     background-color:#5139d8;
+    box-shadow: 0 2px 4px #3e357799;
 }
 .imageFile__del_btn{
     display: block;
     position: absolute;
-    background: none;
-    color: #ffffff;
+    background: #fff;
+    color: #bababa;
     border: none;
     cursor: pointer;
     right: 10px;
-    top:10px;
+    top: 10px;
     z-index: 2;
+    border-radius: 30px;
+    height: 25px;
+    width: 25px;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 2px 4px #92929299;
+    transition: .3s;
+}
+.imageFile__del_btn:hover{
+    box-shadow: 0 2px 6px #92929299;
+    color: #2d2d2d;
 }
 
 @media only screen and (max-width: 1300px){

@@ -5,6 +5,11 @@ const initialState = {
     error: null,
     loading: false,
     uploading:false,
+    uploadError: null,
+    downloading:false,
+    downloadingError:null,
+    deleting: false,
+    deleteError: null,
     files: []
 }
 
@@ -68,6 +73,19 @@ const reducer=(state = initialState ,action)=>{
                 files: files
             })
         }
+        case 'DOWNLOAD_START' :
+            return updateObject(state,{
+                downloading: true
+            })
+        case 'DOWNLOAD_FAILED': 
+            return updateObject(state,{
+                downloadingError: action.error,
+                downloading: false
+            })
+        case 'DOWNLOAD_SUCCESS': 
+            return updateObject(state,{
+                downloading: false
+            })
         case 'ADD_FILE':{
             return updateObject(state,{
                 files: state.files.concat(action.file)

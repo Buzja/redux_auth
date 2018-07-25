@@ -21,9 +21,6 @@ const database = firebase.database();
 
 class CloudStorage extends Component {
 
-  // state ={
-  //   files:[]
-  // }
   dbPath = `${this.props.userId}/files`;
 
   uploadFiles = selectedFiles =>{
@@ -47,57 +44,35 @@ class CloudStorage extends Component {
     this.props.subscribeOnDelete(database,this.dbPath);
   }
 
-  componentWillMount=()=>{
-    // const prevFiles = this.state.files;
-
-    // database.ref(this.dbPath).on('child_added',snap=>{
-    //   prevFiles.push({
-    //     id: snap.key,
-    //     name: snap.val().name,
-    //     downloadUrl: snap.val().downloadUrl,
-    //     type: snap.val().type
-    //   })
-
-    //   this.setState({
-    //     files: prevFiles
-    //   })
-      
-    // })
-
-    // database.ref(this.dbPath).on('child_removed',snap=>{
-    //   for(let i =0; i<prevFiles.length;i++){
-    //     if(prevFiles[i].id === snap.key){
-    //       prevFiles.splice(i,1);
-    //     }
-    //   }
-      
-    //   this.setState({
-    //     files: prevFiles
-    //   })
-
-    // })
+  deleteFile=(file)=>{
+    this.props.onDelete(database,storage,file,this.dbPath);
   }
 
-  deleteFile=(file)=>{
-    // storage.ref(this.dbPath+"/"+file.name).delete().then(()=>{
-    //   database.ref(this.dbPath).child(file.id).remove();
-    //   console.log("deleted successfully!");
-    // })
-    this.props.onDelete(database,storage,file,this.dbPath);
+  downloadFile=(url,name)=>{
+    this.props.onDownloadFile(url,name)
   }
 
   render() {
     const files = this.props.files.map(file=>(
-      <ImageFile key={file.id} downloadUrl={file.downloadUrl} name={file.name} type={file.type} onClick={()=>this.deleteFile(file)}/>
+      <ImageFile key={file.id}
+       downloadUrl={file.downloadUrl} 
+       name={file.name}
+        type={file.type} 
+        onDownload={()=>this.downloadFile(file.downloadUrl,file.name)} 
+        onDelete={()=>this.deleteFile(file)}/>
     ));
 
     return (
       <div className="App">
-        <Input onClick={this.uploadFiles}/>
-        <Link to="/logout">logout</Link>
-        <h1>{this.props.email}</h1>
+        <div className="head_sec">
+          <Input onClick={this.uploadFiles}/>
+          <div className="user_data">
+          <div className="user_email"><span>user:</span>{this.props.email}</div>
+          <Link to="/logout">logout</Link>
+          </div>
+        </div>
         <div className="files_wrapper">         
-        {files}
+          {files}
         </div>
       </div>     
     )
@@ -118,7 +93,8 @@ const  mapDispatchToProps = dispatch =>{
     onUpload: (database,storage,dbPath,uploadFile)=>dispatch(actions.onUploadFiles(database,storage,dbPath,uploadFile)),
     onDelete: (database,storage,file,dbPath)=>dispatch(actions.deleteFile(database,storage,file,dbPath)),
     subscribeOnDelete: (database,dbPath)=>dispatch(actions.subscribeOnDelete(database,dbPath)),
-    subscribeOnAdd: (database,dbPath)=>dispatch(actions.subscribeOnAdd(database,dbPath))
+    subscribeOnAdd: (database,dbPath)=>dispatch(actions.subscribeOnAdd(database,dbPath)),
+    onDownloadFile: (url,name)=>dispatch(actions.onDownloadFile(url,name))
   }
 }
 
