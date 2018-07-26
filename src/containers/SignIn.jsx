@@ -24,6 +24,7 @@ class SignIn extends React.Component{
         }
         return(
             <div className="form_container">
+            <h2>Sign in</h2>
             <AuthForm onSubmit = {this.onSubmit} buttonName={"sign in"}/>
             <Link to="/signup">sign up</Link>
             </div>
