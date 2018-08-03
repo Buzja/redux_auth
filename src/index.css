@@ -24,3 +24,8 @@ body {
 .form_container a:hover{
   color:#6248ff;
 }
+
+.error{
+  color: #ff5000;
+  font-weight: bold;
+}

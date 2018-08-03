@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import AuthForm from '../components/AuthForm';
 import {Redirect} from 'react-router-dom';
+import Spinner from '../components/Spinner/Spinner';
 import * as actions from '../store/actions';
 
 class SignIn extends React.Component{
@@ -17,16 +18,23 @@ class SignIn extends React.Component{
     }
 
     render(){
-        if(this.props.isAuthenticated){
+        const {isAuthenticated, loading,error} = this.props;
+        if(isAuthenticated){
             return(
-                <Redirect to="/" />
+                <Redirect to="/" push={false}/>
+            );
+        }
+        if(loading){
+            return(
+                <Spinner />
             );
         }
         return(
             <div className="form_container">
             <h2>Sign in</h2>
+            <div className="error">{error}</div>
             <AuthForm onSubmit = {this.onSubmit} buttonName={"sign in"}/>
-            <Link to="/signup">sign up</Link>
+            <Link to="/signup" replace>sign up</Link>
             </div>
         );
     }

@@ -91,6 +91,12 @@ export const downloadFailed = (error) =>{
     }
 }
 
+export const addFileStarts=()=>{
+    return{
+        type:'ADD_FILE_STARTS'
+    }
+}
+
 export const addFile=(snap)=>{
     return {
         type: 'ADD_FILE',
@@ -104,7 +110,6 @@ export const addFile=(snap)=>{
 }
 
 export const onAuth = (email,password,url) =>{
-    
     return dispatch=>{
         dispatch(authStart());
         const authData = {
@@ -124,7 +129,6 @@ export const onAuth = (email,password,url) =>{
       .catch((err)=>{
         dispatch(authFail(err.response.data.error.message));
       });
-        
     }
 }
 
@@ -189,6 +193,7 @@ export const subscribeOnDelete=(database,dbPath)=>{
 export const subscribeOnAdd = (database,dbPath)=>{
     return dispatch=>{
     database.ref(dbPath).on('child_added',snap=>{
+    dispatch(addFileStarts());
        dispatch(addFile(snap));
       })
     }

@@ -11,13 +11,12 @@ class Logout extends Component {
     }
 
     render(){
-        return <Redirect to="/"/>;
+        return <Redirect to="/" push={false}/>;
     }
 }
 
 const mapDispatchProps = dispatch =>{
   return {
-    // onLogout: ()=>dispatch(actions.logout)
     onLogout: bindActionCreators(actions,dispatch)
   }
 }

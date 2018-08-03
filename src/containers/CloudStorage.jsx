@@ -6,6 +6,7 @@ import ImageFile from '../components/ImageFile';
 import Input from '../components/Input';
 import './CloudStorage.css';
 import * as actions from '../store/actions';
+import Spinner from '../components/Spinner/Spinner';
 
 const config = {
   apiKey: "AIzaSyDk4JksCFeMAzEmlX53iAdI4wGrh9sGxP4",
@@ -21,6 +22,10 @@ const database = firebase.database();
 
 class CloudStorage extends Component {
 
+  state={
+    loadingpage: true
+  }
+  
   dbPath = `${this.props.userId}/files`;
 
   uploadFiles = selectedFiles =>{
@@ -40,6 +45,11 @@ class CloudStorage extends Component {
   }
 
   componentDidMount=()=>{
+   setTimeout(() => {
+     this.setState({
+       loadingpage: false
+     })
+   }, 1500);
     this.props.subscribeOnAdd(database,this.dbPath);
     this.props.subscribeOnDelete(database,this.dbPath);
   }
@@ -53,6 +63,9 @@ class CloudStorage extends Component {
   }
 
   render() {
+    const {deleting,downloading,uploading} = this.props;
+    const {loadingpage} = this.state;
+    const spinner = loadingpage || deleting|| uploading||downloading?<Spinner />:null;
     const files = this.props.files.map(file=>(
       <ImageFile key={file.id}
        downloadUrl={file.downloadUrl} 
@@ -63,12 +76,14 @@ class CloudStorage extends Component {
     ));
 
     return (
+      
       <div className="App">
+        {spinner}
         <div className="head_sec">
           <Input onClick={this.uploadFiles}/>
           <div className="user_data">
           <div className="user_email"><span>user:</span>{this.props.email}</div>
-          <Link to="/logout">logout</Link>
+          <Link to="/logout" replace>logout</Link>
           </div>
         </div>
         <div className="files_wrapper">         
@@ -84,7 +99,10 @@ const mapStateToProps = state =>{
     email: state.userEmail,
     token: state.token,
     userId: state.userId,
-    files: state.files
+    files: state.files,
+    downloading: state.downloading,
+    uploading: state.uploading,
+    deleting: state.deleting
   }
 }
 

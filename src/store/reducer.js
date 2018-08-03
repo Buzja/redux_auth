@@ -9,6 +9,7 @@ const initialState = {
     downloading:false,
     downloadingError:null,
     deleting: false,
+    loadfile:false,
     deleteError: null,
     files: []
 }
@@ -86,9 +87,13 @@ const reducer=(state = initialState ,action)=>{
             return updateObject(state,{
                 downloading: false
             })
+        case 'ADD_FILE_STARTS': return updateObject(state,{
+            loadfile: true
+        })
         case 'ADD_FILE':{
             return updateObject(state,{
-                files: state.files.concat(action.file)
+                files: state.files.concat(action.file),
+                loadfile: false
             })
         }
             
