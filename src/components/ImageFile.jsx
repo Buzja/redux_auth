@@ -8,8 +8,8 @@ function ImageFile({downloadUrl,name,type,onDownload,onDelete})
     <div className="imageFile">
     <div className="info_wrapper">
     <div className="imageFile__image_wrapper" style={type.search("image") !== -1 ?
-    {backgroundImage: `url(${downloadUrl.toString()})`} : 
-    {backgroundImage: `url(${docImg})`,backgroundSize: '30%', backgroundColor: "#efefef"}}>
+    {backgroundImage: `url("${downloadUrl.toString()}")`} : 
+    {backgroundImage: `url("${docImg}")`,backgroundSize: '30%', backgroundColor: "#efefef"}}>
           <button  className="imageFile__del_btn" onClick={onDelete}>X</button>
         </div>
         <div className="name_sec">
